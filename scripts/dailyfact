@@ -12,6 +12,7 @@ text = fact[1]
 print "Preparing to blast the following fact: " + text
 cursor.execute("UPDATE facts SET used='Y' WHERE id=%s", (fid))
 
+# be honest!
 account_sid = "ACbd5ec998bc884fa1b18c9f146644c91c"
 auth_token = "e81f3f4a6175c5be5d754ade48344c39"
 client = TwilioRestClient(account_sid, auth_token)
