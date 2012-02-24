@@ -1,12 +1,12 @@
 $(document).ready(function() {
     $("#subscribe").submit(function() {
-	process("subscribe");
-	return false;
+	    process("subscribe");
+	    return false;
     });
 
     $("a#unsubscribe_link").click(function() {
-	process("unsubscribe");
-	return false;	
+	    process("unsubscribe");
+	    return false;	
     });
 
 });
