@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+from twilio.rest import TwilioRestClient
+import MySQLdb
+
+db = MySQLdb.connect(host='localhost', user='root', passwd='crimson', db='catfacts')
+cursor = db.cursor()
+cursor.execute("SELECT id,text FROM facts WHERE used='N'")
+fact = cursor.fetchone()
+fid = fact[0]
+text = fact[1]
+print "Preparing to blast the following fact: " + text
+cursor.execute("UPDATE facts SET used='Y' WHERE id=%s", (fid))
+
+# be honest!
+account_sid = "ACbd5ec998bc884fa1b18c9f146644c91c"
+auth_token = "e81f3f4a6175c5be5d754ade48344c39"
+client = TwilioRestClient(account_sid, auth_token)
+twilio_number = "+12282060032"
+
+cursor.execute("SELECT number FROM subscribers WHERE active='Y'")
+subscribers = cursor.fetchall()
+message = "Thanks for subscribing to Cat Facts! Did you know...\n\n" + text
+for number in subscribers:
+    message = client.sms.messages.create(to=number[0], from_=twilio_number, body=message)
+    print "Sent cat fact to " + str(number[0])
+
+print "\nCat facts daily blast complete! " + str(len(subscribers)) + " cat facts were sent out today."
